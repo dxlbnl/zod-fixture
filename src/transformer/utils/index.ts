@@ -82,11 +82,11 @@ export class Utils {
 		schema: ZodTypeAny,
 	): schema is TSchema {
 		return isZodConstructor(target)
-			? schema._def.typeName === target.name
+			? schema.constructor === target
 			: // If our generator was created with an instance, make sure it matches
-			  // the schema we're trying to generate.
-			  // This is particularly important for z.custom schemas.
-			  schema === target;
+				// the schema we're trying to generate.
+				// This is particularly important for z.custom schemas.
+				schema === target;
 	}
 
 	checks<TChecks extends { kind: string }[]>(checks: TChecks) {

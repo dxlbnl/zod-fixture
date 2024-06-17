@@ -4,6 +4,12 @@
 
 import type {
 	EnumLike,
+	ZodDiscriminatedUnionOption,
+	ZodRawShape,
+	ZodStringDef,
+	ZodTypeAny,
+} from 'zod';
+import {
 	ZodAny as TrueZodAny,
 	ZodArray as TrueZodArray,
 	ZodBigInt as TrueZodBigInt,
@@ -40,73 +46,50 @@ import type {
 	ZodUnion as TrueZodUnion,
 	ZodUnknown as TrueZodUnknown,
 	ZodVoid as TrueZodVoid,
-	ZodDiscriminatedUnionOption,
-	ZodRawShape,
-	ZodStringDef,
-	ZodTypeAny,
 } from 'zod';
 
-import type { ZodConstructor } from '@/transformer/generator';
-
-// Forces typescript to cast our fake constructors as a true zod type
-const castAs = <T extends ZodTypeAny>(typeName: string) => {
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	const mock = () => {};
-	// Reassign function name to match the zod type name
-	Object.defineProperty(mock, 'name', { value: typeName });
-	// Stubs out the create method so we can create "instances" to use with `.from`
-	Object.defineProperty(mock, 'create', {
-		value: () => ({ _def: { typeName } }),
-	});
-	return mock as unknown as ZodConstructor<T>;
-};
-
-export const ZodString = castAs<TrueZodString>('ZodString');
-export const ZodNumber = castAs<TrueZodNumber>('ZodNumber');
-export const ZodNaN = castAs<TrueZodNaN>('ZodNaN');
-export const ZodBigInt = castAs<TrueZodBigInt>('ZodBigInt');
-export const ZodBoolean = castAs<TrueZodBoolean>('ZodBoolean');
-export const ZodDate = castAs<TrueZodDate>('ZodDate');
-export const ZodSymbol = castAs<TrueZodSymbol>('ZodSymbol');
-export const ZodUndefined = castAs<TrueZodUndefined>('ZodUndefined');
-export const ZodNull = castAs<TrueZodNull>('ZodNull');
-export const ZodAny = castAs<TrueZodAny>('ZodAny');
-export const ZodUnknown = castAs<TrueZodUnknown>('ZodUnknown');
-export const ZodNever = castAs<TrueZodNever>('ZodNever');
-export const ZodVoid = castAs<TrueZodVoid>('ZodVoid');
-export const ZodArray = castAs<TrueZodArray<ZodTypeAny>>('ZodArray');
-export const ZodObject = castAs<TrueZodObject<ZodRawShape>>('ZodObject');
-export const ZodUnion =
-	castAs<TrueZodUnion<readonly [ZodTypeAny, ...ZodTypeAny[]]>>('ZodUnion');
-export const ZodDiscriminatedUnion = castAs<
-	TrueZodDiscriminatedUnion<string, ZodDiscriminatedUnionOption<string>[]>
->('ZodDiscriminatedUnion');
-export const ZodIntersection =
-	castAs<TrueZodIntersection<ZodTypeAny, ZodTypeAny>>('ZodIntersection');
-export const ZodTuple = castAs<TrueZodTuple>('ZodTuple');
-export const ZodRecord = castAs<TrueZodRecord>('ZodRecord');
-export const ZodMap = castAs<TrueZodMap>('ZodMap');
-export const ZodSet = castAs<TrueZodSet>('ZodSet');
-export const ZodFunction =
-	castAs<TrueZodFunction<TrueZodTuple<[], ZodTypeAny>, ZodTypeAny>>(
-		'ZodFunction',
-	);
-export const ZodLazy = castAs<TrueZodLazy<ZodTypeAny>>('ZodLazy');
-export const ZodLiteral = castAs<TrueZodLiteral<unknown>>('ZodLiteral');
-export const ZodEnum = castAs<TrueZodEnum<[string, ...string[]]>>('ZodEnum');
-export const ZodEffects = castAs<TrueZodEffects<ZodTypeAny>>('ZodEffects');
-export const ZodNativeEnum =
-	castAs<TrueZodNativeEnum<EnumLike>>('ZodNativeEnum');
-export const ZodOptional = castAs<TrueZodOptional<ZodTypeAny>>('ZodOptional');
-export const ZodNullable = castAs<TrueZodNullable<ZodTypeAny>>('ZodNullable');
-export const ZodDefault = castAs<TrueZodDefault<ZodTypeAny>>('ZodDefault');
-export const ZodCatch = castAs<TrueZodCatch<ZodTypeAny>>('ZodCatch');
-export const ZodPromise = castAs<TrueZodPromise<ZodTypeAny>>('ZodPromise');
-export const ZodBranded =
-	castAs<TrueZodBranded<ZodTypeAny, PropertyKey>>('ZodBranded');
-export const ZodPipeline =
-	castAs<TrueZodPipeline<ZodTypeAny, ZodTypeAny>>('ZodPipeline');
-export const ZodReadonly = castAs<TrueZodReadonly<ZodTypeAny>>('ZodReadonly');
+export const ZodString = TrueZodString;
+export const ZodNumber = TrueZodNumber;
+export const ZodNaN = TrueZodNaN;
+export const ZodBigInt = TrueZodBigInt;
+export const ZodBoolean = TrueZodBoolean;
+export const ZodDate = TrueZodDate;
+export const ZodSymbol = TrueZodSymbol;
+export const ZodUndefined = TrueZodUndefined;
+export const ZodNull = TrueZodNull;
+export const ZodAny = TrueZodAny;
+export const ZodUnknown = TrueZodUnknown;
+export const ZodNever = TrueZodNever;
+export const ZodVoid = TrueZodVoid;
+export const ZodArray = TrueZodArray<ZodTypeAny>;
+export const ZodObject = TrueZodObject<ZodRawShape>;
+export const ZodUnion = TrueZodUnion<readonly [ZodTypeAny, ...ZodTypeAny[]]>;
+export const ZodDiscriminatedUnion = TrueZodDiscriminatedUnion<
+	string,
+	ZodDiscriminatedUnionOption<string>[]
+>;
+export const ZodIntersection = TrueZodIntersection<ZodTypeAny, ZodTypeAny>;
+export const ZodTuple = TrueZodTuple;
+export const ZodRecord = TrueZodRecord;
+export const ZodMap = TrueZodMap;
+export const ZodSet = TrueZodSet;
+export const ZodFunction = TrueZodFunction<
+	TrueZodTuple<[], ZodTypeAny>,
+	ZodTypeAny
+>;
+export const ZodLazy = TrueZodLazy<ZodTypeAny>;
+export const ZodLiteral = TrueZodLiteral<unknown>;
+export const ZodEnum = TrueZodEnum<[string, ...string[]]>;
+export const ZodEffects = TrueZodEffects<ZodTypeAny>;
+export const ZodNativeEnum = TrueZodNativeEnum<EnumLike>;
+export const ZodOptional = TrueZodOptional<ZodTypeAny>;
+export const ZodNullable = TrueZodNullable<ZodTypeAny>;
+export const ZodDefault = TrueZodDefault<ZodTypeAny>;
+export const ZodCatch = TrueZodCatch<ZodTypeAny>;
+export const ZodPromise = TrueZodPromise<ZodTypeAny>;
+export const ZodBranded = TrueZodBranded<ZodTypeAny, PropertyKey>;
+export const ZodPipeline = TrueZodPipeline<ZodTypeAny, ZodTypeAny>;
+export const ZodReadonly = TrueZodReadonly<ZodTypeAny>;
 
 export enum ZodParsedType {
 	function = 'function',
@@ -189,7 +172,7 @@ export const util = {
 						}
 					}
 					return keys;
-			  },
+				},
 };
 
 export type InferZodType<T extends { _output: unknown }> = T['_output'];
